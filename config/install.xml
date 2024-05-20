@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<concrete5-cif version="1.0">
+    <attributetypes>
+        <attributetype handle="redirect_by_browser_lang" name="Redirecy by Browser Language" package="redirect_by_browser_lang">
+            <categories>
+                <category handle="collection" />
+            </categories>
+        </attributetype>
+    </attributetypes>
+    <attributekeys>
+        <attributekey handle="redirect_by_browser_lang" name="Redirecy by Browser Language" package="redirect_by_browser_lang" searchable="1" indexed="1" type="redirect_by_browser_lang" category="collection">
+            <type>
+                <excluded-querystring-param>cID</excluded-querystring-param>
+            </type>
+        </attributekey>
+    </attributekeys>
+    <attributesets>
+        <attributeset handle="navigation" name="Navigation and Indexing" package="redirect_by_browser_lang" locked="0" category="collection">
+            <attributekey handle="redirect_by_browser_lang" />
+        </attributeset>
+    </attributesets>
+</concrete5-cif>

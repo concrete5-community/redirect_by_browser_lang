@@ -1,0 +1,37 @@
+{
+    "name": "concrete5-community/redirect_by_browser_lang",
+    "description": "This ConcreteCMS/concrete5 addon provides a page attribute that lets you redirect visitors accordingly to the language of their browser",
+    "type": "concrete5-package",
+    "keywords": [
+        "concrete",
+        "concrete cms",
+        "concrete5",
+        "addon",
+        "add-on",
+        "extension",
+        "redirect",
+        "browser",
+        "language"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michele Locati",
+            "email": "michele@locati.it",
+            "homepage": "https://mlocati.github.io/",
+            "role": "Author"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/concrete5-community/redirect_by_browser_lang/issues",
+        "source": "https://github.com/concrete5-community/redirect_by_browser_lang"
+    },
+    "require": {
+        "concrete5/core": ">=8.5.10"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "classmap-authoritative#": true,
+        "sort-packages": true
+    }
+}
