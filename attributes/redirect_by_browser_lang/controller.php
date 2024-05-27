@@ -229,6 +229,16 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
     /**
      * {@inheritdoc}
      *
+     * @see \Concrete\Core\Attribute\Controller::searchKeywords()
+     */
+    public function searchKeywords($keywords, $queryBuilder)
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see \Concrete\Core\Attribute\Controller::createAttributeValueFromRequest()
      */
     public function createAttributeValueFromRequest()
