@@ -263,6 +263,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             ->setForwardQueryString(!empty($data['forwardQueryString']))
             ->setRedirectRequestsWithBody(!empty($data['redirectRequestsWithBody']))
             ->setRedirectIfUnaccessible(!empty($data['redirectIfUnaccessible']))
+            ->setRedirectByBrowsingState(empty($data['redirectByBrowsingState']) ? 0 : (int) $data['redirectByBrowsingState'])
         ;
     }
 
@@ -283,6 +284,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             ->setForwardQueryString(filter_var($akv->value['forwardQueryString'], FILTER_VALIDATE_BOOLEAN))
             ->setRedirectRequestsWithBody(filter_var($akv->value['redirectRequestsWithBody'], FILTER_VALIDATE_BOOLEAN))
             ->setRedirectIfUnaccessible(filter_var($akv->value['redirectIfUnaccessible'], FILTER_VALIDATE_BOOLEAN))
+            ->setRedirectByBrowsingState(empty($akv->value['redirectByBrowsingState']) ? 0 : (int) $akv->value['redirectByBrowsingState'])
         ;
     }
 
@@ -301,6 +303,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             $node->addAttribute('forwardQueryString', $value->isForwardQueryString() ? 'true' : 'false');
             $node->addAttribute('redirectRequestsWithBody', $value->isRedirectRequestsWithBody() ? 'true' : 'false');
             $node->addAttribute('redirectIfUnaccessible', $value->isRedirectIfUnaccessible() ? 'true' : 'false');
+            $node->addAttribute('redirectByBrowsingState', (string) $value->getRedirectByBrowsingState());
         }
     }
 
@@ -340,6 +343,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             'Forward queryString',
             'Redirect requests with body',
             'Redirect to unaccessible pages',
+            'Redirect by browsing state',
         ];
     }
 
@@ -358,6 +362,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             $value ? ($value->isForwardQueryString() ? '1' : '0') : '',
             $value ? ($value->isRedirectRequestsWithBody() ? '1' : '0') : '',
             $value ? ($value->isRedirectIfUnaccessible() ? '1' : '0') : '',
+            $value ? (string) $value->getRedirectByBrowsingState() : '',
         ];
     }
 
@@ -382,6 +387,7 @@ class Controller extends AttributeTypeController implements MulticolumnTextExpor
             ->setForwardQueryString(filter_var(trim(array_shift($textRepresentation)), FILTER_VALIDATE_BOOLEAN))
             ->setRedirectRequestsWithBody(filter_var(trim(array_shift($textRepresentation)), FILTER_VALIDATE_BOOLEAN))
             ->setRedirectIfUnaccessible(filter_var(trim(array_shift($textRepresentation)), FILTER_VALIDATE_BOOLEAN))
+            ->setRedirectByBrowsingState((int) trim(array_shift($textRepresentation)))
         ;
 
         return $value;

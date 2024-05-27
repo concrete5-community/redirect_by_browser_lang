@@ -1,5 +1,7 @@
 <?php
 
+use Concrete\Package\RedirectByBrowserLang\Entity\RedirectValue;
+
 defined('C5_EXECUTE') or die('Access Denied.');
 
 /**
@@ -47,6 +49,19 @@ defined('C5_EXECUTE') or die('Access Denied.');
             <?= $form->checkbox($view->field('redirectIfUnaccessible'), '1', $value->isRedirectIfUnaccessible()) ?>
             <?= t('Redirect even if the destination page is not accessible by the site visitor?') ?>
         </label>
+    </div>
+
+    <div class="checkbox">
+        <?= $form->label($view->field('redirectByBrowsingState'), t('Redirect by browsing state')) ?>
+        <?= $form->select(
+            $view->field('redirectByBrowsingState'),
+            [
+                RedirectValue::BROWSINGSTATE_ANY => t("it doesn't matter"),
+                RedirectValue::BROWSINGSTATE_FIRST_WEBSITEPAGE => t('redirect only if this is the first page visited on the website'),
+                RedirectValue::BROWSINGSTATE_ONCE_PER_PAGE => t('redirect this page only the first time'),
+            ],
+            $value->getRedirectByBrowsingState()
+        ) ?>
     </div>
 
     <?php

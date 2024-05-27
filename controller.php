@@ -10,6 +10,9 @@ defined('C5_EXECUTE') or die('Access denied.');
 
 class Controller extends Package
 {
+    const SESSIONKEY_FIRSTPAGEDISPLAYED = 'ccm-redirect_by_browser_lang-firstpagedisplayed';
+    const SESSIONKEY_REDIRECTEDPAGES = 'ccm-redirect_by_browser_lang-redirectedPages';
+
     /**
      * The package handle.
      *
@@ -75,7 +78,8 @@ class Controller extends Package
 
     public function on_start()
     {
-        $this->app->make('director')->addListener('on_page_view', function(Event $event) {
+        $director = $this->app->make('director');
+        $director->addListener('on_page_view', function(Event $event) {
             $page = $event->getPageObject();
             if ($page instanceof Page) {
                 $response = $this->handlePage($page);
@@ -83,6 +87,12 @@ class Controller extends Package
                     $response->send();
                     exit();
                 }
+            }
+        });
+        $director->addListener('on_page_output', function() {
+            $session = $this->app->make('session');
+            if (!$session->get(self::SESSIONKEY_FIRSTPAGEDISPLAYED)) {
+                $session->set(self::SESSIONKEY_FIRSTPAGEDISPLAYED, true);
             }
         });
     }

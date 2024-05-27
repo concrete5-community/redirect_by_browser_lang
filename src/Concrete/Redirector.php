@@ -6,8 +6,10 @@ use Concrete\Core\Http\ResponseFactoryInterface;
 use Concrete\Core\Multilingual\Page\Section\Section;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Permission\Checker;
+use Concrete\Core\Session\SessionValidator;
 use Concrete\Core\Url\Resolver\PageUrlResolver;
 use Concrete\Core\User\User;
+use Concrete\Package\RedirectByBrowserLang\Controller as MyPackageController;
 use Concrete\Package\RedirectByBrowserLang\Entity\RedirectSettings;
 use Concrete\Package\RedirectByBrowserLang\Entity\RedirectValue;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,12 +38,24 @@ class Redirector
      */
     private $responseFactory;
 
-    public function __construct(User $user, Request $request, PageUrlResolver $urlResolver, ResponseFactoryInterface $responseFactory)
+    /**
+     * @var \Concrete\Core\Session\SessionValidator
+     */
+    private $sessionValidator;
+
+    public function __construct(
+        User $user,
+        Request $request,
+        PageUrlResolver $urlResolver,
+        ResponseFactoryInterface $responseFactory,
+        SessionValidator $sessionValidator
+    )
     {
         $this->user = $user;
         $this->request = $request;
         $this->urlResolver = $urlResolver;
         $this->responseFactory = $responseFactory;
+        $this->sessionValidator = $sessionValidator;
     }
 
     /**
@@ -95,6 +109,24 @@ class Redirector
      */
     private function checkIfCanBeRedirected(Page $page, RedirectValue $options)
     {
+        switch ($options->getRedirectByBrowsingState()) {
+            case RedirectValue::BROWSINGSTATE_FIRST_WEBSITEPAGE:
+                $session = $this->sessionValidator->getActiveSession(false);
+                if ($session && $session->get(MyPackageController::SESSIONKEY_FIRSTPAGEDISPLAYED)) {
+                    return false;
+                }
+                break;
+            case RedirectValue::BROWSINGSTATE_ONCE_PER_PAGE:
+                $session = $this->sessionValidator->getActiveSession(true);
+                $already = $session->get(MyPackageController::SESSIONKEY_REDIRECTEDPAGES, []);
+                $cID = (int) $page->getCollectionID();
+                if (in_array($cID, $already, true)) {
+                    return false;
+                }
+                $already[] = $cID;
+                $session->set(MyPackageController::SESSIONKEY_REDIRECTEDPAGES, $already);
+                break;
+        }
         if ($this->user->isRegistered()) {
             $checker = new Checker($page);
             if ($checker->canEditPageContents()) {

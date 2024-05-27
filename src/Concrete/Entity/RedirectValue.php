@@ -12,6 +12,12 @@ defined('C5_EXECUTE') or die('Access denied.');
  */
 class RedirectValue extends AbstractValue
 {
+    const BROWSINGSTATE_ANY = 0;
+
+    const BROWSINGSTATE_FIRST_WEBSITEPAGE = 1;
+
+    const BROWSINGSTATE_ONCE_PER_PAGE = 2;
+
     /**
      * Should we redirect even if the current user can edit the page?
      *
@@ -57,6 +63,15 @@ class RedirectValue extends AbstractValue
      */
     protected $redirectIfUnaccessible;
 
+    /**
+     * Should we redirect requests only if the page is the first visited one?
+     *
+     * @Doctrine\ORM\Mapping\Column(type="integer", nullable=false, options={"default": 0, "unsigned": true})
+     *
+     * @var int
+     */
+    protected $redirectByBrowsingState;
+
     public function __construct()
     {
         $this->redirectIfEditable = false;
@@ -64,6 +79,7 @@ class RedirectValue extends AbstractValue
         $this->forwardQueryString = false;
         $this->redirectRequestsWithBody = false;
         $this->redirectIfUnaccessible = false;
+        $this->redirectByBrowsingState = self::BROWSINGSTATE_ANY;
     }
 
     /**
@@ -162,6 +178,26 @@ class RedirectValue extends AbstractValue
     public function setRedirectIfUnaccessible($value)
     {
         $this->redirectIfUnaccessible = (bool) $value;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRedirectByBrowsingState()
+    {
+        return $this->redirectByBrowsingState;
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return $this
+     */
+    public function setRedirectByBrowsingState($value)
+    {
+        $this->redirectByBrowsingState = (int) $value;
 
         return $this;
     }
