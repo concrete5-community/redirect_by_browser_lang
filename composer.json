@@ -27,7 +27,7 @@
         "source": "https://github.com/concrete5-community/redirect_by_browser_lang"
     },
     "require": {
-        "concrete5/core": ">=8.5.10"
+        "concrete5/core": "^8.5.10 || ^9"
     },
     "config": {
         "preferred-install": "dist",
