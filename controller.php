@@ -1,6 +1,7 @@
 <?php
 namespace Concrete\Package\RedirectByBrowserLang;
 
+use Concrete\Core\Database\EntityManager\Provider\ProviderInterface;
 use Concrete\Core\Package\Package;
 use Concrete\Core\Page\Event;
 use Concrete\Core\Page\Page;
@@ -8,7 +9,7 @@ use Concrete\Package\RedirectByBrowserLang\Entity\RedirectValue;
 
 defined('C5_EXECUTE') or die('Access denied.');
 
-class Controller extends Package
+class Controller extends Package implements ProviderInterface
 {
     const SESSIONKEY_FIRSTPAGEDISPLAYED = 'ccm-redirect_by_browser_lang-firstpagedisplayed';
     const SESSIONKEY_REDIRECTEDPAGES = 'ccm-redirect_by_browser_lang-redirectedPages';
@@ -74,6 +75,16 @@ class Controller extends Package
     {
         parent::upgrade();
         $this->installContentFile('config/install.xml');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \Concrete\Core\Database\EntityManager\Provider\ProviderInterface::getDrivers()
+     */
+    public function getDrivers()
+    {
+        return [];
     }
 
     public function on_start()
